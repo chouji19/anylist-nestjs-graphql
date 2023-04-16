@@ -1,0 +1,254 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  """Unique identifier for the user"""
+  id: ID!
+
+  """Full name of the user"""
+  fullName: String!
+
+  """Email address of the user"""
+  email: String!
+
+  """Roles of the user"""
+  roles: [String!]!
+
+  """Is the user active?"""
+  isActive: Boolean!
+
+  """User who update this user"""
+  lastUpdatedBy: User
+
+  """Get the number of items created by the user"""
+  itemCount: Int!
+
+  """Get the items created by the user"""
+  items(
+    offset: Int = 0
+    limit: Int = 10
+
+    """Search term"""
+    search: String
+  ): [Item!]!
+
+  """Get the number of items created by the user"""
+  listCount: Int!
+
+  """Get the lists created by the user"""
+  lists(
+    offset: Int = 0
+    limit: Int = 10
+
+    """Search term"""
+    search: String
+  ): [List!]!
+}
+
+type List {
+  """The id of the list"""
+  id: ID!
+
+  """The name of the list"""
+  name: String!
+
+  """The user that owns the list"""
+  user: User!
+  items(
+    offset: Int = 0
+    limit: Int = 10
+
+    """Search term"""
+    search: String
+  ): [ListItem!]!
+  totalItems: Int!
+}
+
+type ListItem {
+  """Unique identifier of the list item"""
+  id: String!
+
+  """The quantity of the item"""
+  quantity: Float!
+
+  """Whether the item has been completed"""
+  completed: Boolean!
+
+  """The list that the list item belongs to"""
+  list: List!
+
+  """The item that belongs to the list item"""
+  item: Item!
+}
+
+type Item {
+  """The id of the item"""
+  id: ID!
+
+  """The name of the item"""
+  name: String!
+
+  """The unit of the item"""
+  quantityUnit: String
+
+  """The user that owns the item"""
+  user: User!
+
+  """The list items that belong to the item"""
+  listItem: [ListItem!]!
+}
+
+type AuthResponse {
+  """JWT token"""
+  token: String!
+
+  """User object"""
+  user: User!
+}
+
+type Query {
+  revalidate: AuthResponse!
+  users(
+    """Valid roles"""
+    roles: [ValidRoles!] = []
+  ): [User!]!
+  user(id: ID!): User!
+  items(
+    offset: Int = 0
+    limit: Int = 10
+
+    """Search term"""
+    search: String
+  ): [Item!]!
+  item(id: ID!): Item!
+  lists(
+    offset: Int = 0
+    limit: Int = 10
+
+    """Search term"""
+    search: String
+  ): [List!]!
+  list(id: ID!): List!
+  listItem(id: ID!): ListItem!
+}
+
+enum ValidRoles {
+  admin
+  user
+  superUser
+}
+
+type Mutation {
+  signUp(signUpInput: SignUpInput!): AuthResponse!
+  login(loginInput: LoginInput!): AuthResponse!
+
+  """Update a user"""
+  updateUser(updateUserInput: UpdateUserInput!): User!
+
+  """Block a user"""
+  blockUser(id: ID!): User!
+  createItem(createItemInput: CreateItemInput!): Item!
+  updateItem(updateItemInput: UpdateItemInput!): Item!
+  removeItem(id: ID!): Item!
+  createList(createListInput: CreateListInput!): List!
+  updateList(updateListInput: UpdateListInput!): List!
+  removeList(id: ID!): List!
+  createListItem(createListItemInput: CreateListItemInput!): ListItem!
+  updateListItem(updateListItemInput: UpdateListItemInput!): ListItem!
+
+  """Execute seed"""
+  executeSeed: Boolean!
+}
+
+input SignUpInput {
+  """Email address of the user"""
+  email: String!
+
+  """Full name of the user"""
+  fullName: String!
+
+  """Password of the user"""
+  password: String!
+}
+
+input LoginInput {
+  """Email address of the user"""
+  email: String!
+
+  """Password of the user"""
+  password: String!
+}
+
+input UpdateUserInput {
+  """Email address of the user"""
+  email: String
+
+  """Full name of the user"""
+  fullName: String
+
+  """Password of the user"""
+  password: String
+  id: ID!
+  roles: [ValidRoles!]
+  isActive: Boolean
+}
+
+input CreateItemInput {
+  """The name of the item"""
+  name: String!
+
+  """The unit of the item"""
+  quantityUnit: String
+}
+
+input UpdateItemInput {
+  """The name of the item"""
+  name: String
+
+  """The unit of the item"""
+  quantityUnit: String
+
+  """The id of the item"""
+  id: ID!
+}
+
+input CreateListInput {
+  """The name of the list"""
+  name: String!
+}
+
+input UpdateListInput {
+  """The name of the list"""
+  name: String
+  id: ID!
+}
+
+input CreateListItemInput {
+  """The quantity of the item in the list"""
+  quantity: Float = 0
+
+  """The completion status of the item in the list"""
+  completed: Boolean = false
+
+  """The id of the list"""
+  listId: ID!
+
+  """The id of the item"""
+  itemId: ID!
+}
+
+input UpdateListItemInput {
+  """The quantity of the item in the list"""
+  quantity: Float = 0
+
+  """The completion status of the item in the list"""
+  completed: Boolean = false
+
+  """The id of the list"""
+  listId: ID
+
+  """The id of the item"""
+  itemId: ID
+  id: ID!
+}
