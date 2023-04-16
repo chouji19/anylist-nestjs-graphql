@@ -107,17 +107,14 @@ export class SeedService {
 	}
 
 	async loadListItems(list: List, items: Item[]): Promise<void> {
-		const listItemsPromises = [];
 		for (const item of items) {
-			listItemsPromises.push(this.listItemService.create({ 
+			this.listItemService.create({ 
 				itemId: item.id,
 				listId: list.id,
 				quantity: Math.floor(Math.random() * 10) + 1,
 				completed: Math.random() < 0.5,
-			}));
+			})
 		}
-
-		await Promise.all(listItemsPromises);
 	}
 
 }
