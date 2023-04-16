@@ -29,10 +29,10 @@ import { ListItemModule } from './list-item/list-item.module';
           ApolloServerPluginLandingPageLocalDefault()
         ],
         context({ req }) {
-          const token = req.headers.authorization?.replace('Bearer ','') || '';
-          if (!token) throw new Error('Token not found');
-          const payload = jwtService.decode(token);
-          if (!payload) throw new Error('Invalid token');
+          // const token = req.headers.authorization?.replace('Bearer ','') || '';
+          // if (!token) throw new Error('Token not found');
+          // const payload = jwtService.decode(token);
+          // if (!payload) throw new Error('Invalid token');
 
 
         },
